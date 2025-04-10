@@ -1,0 +1,17 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Installing dependencies...
+      - pip install -r requirements.txt  # Install dependencies from requirements.txt
+  build:
+    commands:
+      - echo Running build steps...
+      - python -m unittest discover  # Optional: Run unit tests if you have any
+  post_build:
+    commands:
+      - echo Build completed on `date`
+artifacts:
+  files:
+    - '**/*'  # Include all files in the build artifacts
