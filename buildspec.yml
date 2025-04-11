@@ -5,30 +5,28 @@ phases:
     runtime-versions:
       python: 3.8
     commands:
-      # Install dependencies
+      # Installs dependencies
       - echo Installing dependencies...
       - pip install --upgrade pip
       - pip install -r requirements.txt
 
   build:
     commands:
-      # In the build phase, there's no need to zip your files manually
       - echo Building the application...
       - ls -al # Listing files to verify contents of the directory
 
   post_build:
     commands:
-      # Create the Elastic Beanstalk Application Version
       - echo Creating Elastic Beanstalk Application Version...
       - |
-        aws s3 cp . s3://$CODEBUILD_SRC_DIR/ --recursive # Upload all files to S3
+        aws s3 cp . s3://$CODEBUILD_SRC_DIR/ --recursive # Uploads all files to S3
       - |
         aws elasticbeanstalk create-application-version \
           --application-name helloStudent \
           --version-label $CODEBUILD_RESOLVED_SOURCE_VERSION \
           --source-bundle S3Bucket=$CODEBUILD_SRC_DIR,S3Key=myapp/ # Pointing to the S3 location where files were uploaded
 
-      # Deploy to Elastic Beanstalk environment
+      # Deploying to Elastic Beanstalk environment
       - |
         aws elasticbeanstalk update-environment \
           --environment-name your-environment-name \
